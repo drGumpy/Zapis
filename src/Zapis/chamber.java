@@ -5,7 +5,7 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-
+// dane o wzorcowanym punkcie komory
 class chamber_data{
     int value_Rh;
     int value_t;
@@ -27,6 +27,7 @@ public class chamber {
     private ArrayList<chamber_data> standard_point= new ArrayList<chamber_data>();
     private chamber_data[] data;
     
+    //pobranie danych o komorze z pliku
     private void find(File file) throws FileNotFoundException{
         Scanner in= new Scanner(file);
         n= in.nextInt();
@@ -61,6 +62,7 @@ public class chamber {
         in.close();
     }
  
+    //odnalezienie maksimów
     private chamber_data get_max(chamber_data d1, chamber_data d2){
         chamber_data d= new chamber_data();
         d.t1 = Math.max(d1.t1, d2.t1);
@@ -72,8 +74,8 @@ public class chamber {
         return d;
     }
     
+    // wyznaczenie danych o punkcie  dla wzorcowania t +Rh  
     private chamber_data calculate_rh(int t, int rh, int t1, int t2) {
-        System.out.println(t+"\t"+rh+"\t"+t1+"\t"+t2);
         chamber_data d1 = null, d2=null, d=null;
         int b=0;
         for(int i=0; i<standard_point.size(); i++){
@@ -91,14 +93,13 @@ public class chamber {
             if(b==2) break;
         }
         if(b<2) return new chamber_data();
-       // System.out.println(d1);
-       // System.out.println(d2);
         d=get_max(d1, d2);
         d.value_t=t;
         d.value_Rh=rh;
         return d;
     }
  
+ // wyznaczenie danych o punkcie  dla wzorcowania t +Rh 
     private chamber_data calculate_t(int t, int rh, int rh1, int rh2) {
         chamber_data d1 = null, d2=null, d=null;
         int b=0;
@@ -122,6 +123,7 @@ public class chamber {
         return d;
     }
     
+ // wyznaczenie danych o punkcie dla wzorcowania t +Rh
     private chamber_data find_point(int[] range, int t, int rh) {
         //sprawdzenie zakresów
         if(t==range[0] || t==range[1]){
@@ -166,6 +168,7 @@ public class chamber {
         return d;
     }
  
+    //znalezienie danych o punkcie pomiarowym dla wzorcowania t
     private chamber_data find_point(int[] range, int t){
         chamber_data d1 = null, d2=null, d=new chamber_data();
         int b=0;
@@ -188,6 +191,7 @@ public class chamber {
         return d;
     }
     
+    //znalezienie danych o punkcie pomiarowym dla wzorcowania t +Rh
     private chamber_data find_point_Rh(data point){
         int t = Integer.parseInt(point.temp);
         int Rh = Integer.parseInt(point.hum);
@@ -210,6 +214,7 @@ public class chamber {
         return d;
     }
     
+    //znalezienie danych o punkcie pomiarowym dla wzorcowania t
     private chamber_data find_point_t(data point){
         int t = Integer.parseInt(point.temp);
         for(int i=0; i<standard_point.size(); i++){
@@ -226,6 +231,7 @@ public class chamber {
         return d;
     }    
     
+    //przypisanie danych o punktach pomiarowych
     void get_points(ArrayList<data> points){
         int num= points.size();
         data= new chamber_data[num];
@@ -237,6 +243,7 @@ public class chamber {
         }
     }
     
+    //rozpoczęcie programu
     void start(boolean Rh){
         this.Rh=Rh;
         File file;
@@ -273,7 +280,7 @@ public class chamber {
                 System.out.println("brak wprowadzonych punktów pomiarowych");
         }
     }
-    
+    // przekazanie informacji o plikach
     chamber_data[] get(){
         return data;
     }

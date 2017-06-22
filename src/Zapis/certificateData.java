@@ -7,16 +7,14 @@ import java.util.HashMap;
  
 import org.jopendocument.dom.spreadsheet.Sheet;
 import org.jopendocument.dom.spreadsheet.SpreadSheet;
-
-
-//in progerss
+ 
 class IrValue {
     double emissivity;
     int distance;
     double[] paternValue;
 }
 
-//information about calibrated devices
+// dane o urządzeniach
 class device{
     String model;
     String type;
@@ -29,7 +27,7 @@ class device{
     }
 }
 
-//information about probes
+//dane o sondach
 class probe{
     String model="-";
     String type="-";
@@ -38,7 +36,8 @@ class probe{
         return model+"\t"+type+"\t"+producent;
     }
 }
- 
+
+//dane klienta
 class client{
     String name;
     String address;
@@ -48,8 +47,8 @@ class client{
         return address+", "+postal_code+" "+place;
     }
 }
-
-//information required to certificate
+ 
+//dane do certyfikatu
 class certificate{
     String num;
     client user= new client();
@@ -80,61 +79,63 @@ class certificate{
         return s;
     }
 }
-
+ 
 public class certificateData {
     
     static types typ = new types();
     private static File file= new File("C:\\Users\\Laboratorium\\Desktop\\Laboratorium kopia.ods");
     
-    //certificates to do
+    //Spis nie wystawionych certyfikatów wzorcowania
     private static ArrayList<certificate> data = new ArrayList<certificate>();
         
-    //clients data base
+    //Spis danych o klientach
     private static HashMap<String, client> clients_data =new HashMap<String, client>();
     
-    //probes data base
+    //Spis sond stosowanych przy wzrcowanych urządzeniach - brak danych przyszłość
     private static HashMap<String, probe> probes_data =new HashMap<String, probe>();
     
-    //devices data base
+    //Spis typów wzorcowanych urządzeń
     private static HashMap<String, device> devices_data =new HashMap<String, device>();
     
-    //Finding not issued certificates  - no calibration date
+    //Wyszukiwanie nie wsytawionych świadectw - brak daty wzorcowania
     private static void order() throws IOException{
         final Sheet sheet = SpreadSheet.createFromFile(file).getSheet("Zlecenia");
         int d=1;
-        //first row without calibration date
+        //wyszukiwanie pierwszego pola bez daty wzorcowania
         while(sheet.getValueAt(2,d)!="") d++;
+        //wczytywanie zleceń do pierwszego braku urządzenia do wzorcowania
         while(sheet.getValueAt(5,d)!=""){
             if(sheet.getValueAt(2,d)==""){
-            	certificate order = new certificate();
-            	order.num = sheet.getValueAt(1,d).toString();
-            	order.declarant.name= sheet.getValueAt(3,d).toString();
-            	clients_data.put(order.declarant.name, order.declarant);
-            	order.user.name= sheet.getValueAt(4,d).toString();
-            	clients_data.put(order.user.name, order.user);
-            	order.device.model= sheet.getValueAt(5,d).toString();
-            	order.device_serial= sheet.getValueAt(6,d).toString();
-            	order.probe.model= sheet.getValueAt(7,d).toString();
-            	String probe =sheet.getValueAt(8,d).toString();
-            	order.probe_ser=probe;
-            	if(probe.equals(",")){
-            		String[] arr = {""};
-            		order.probe_serial = arr;
-            	}else{
-            		probe=probe.replaceAll("\\s+", "");
-            		order.probe_serial= probe.split(",");
-            	}
-            	order.calibration_code=sheet.getValueAt(9,d).toString();
-            	order.calibration_date=sheet.getValueAt(10,d).toString();
-            	devices_data.put(order.device.model, order.device);
-            	probes_data.put(order.probe.model, order.probe);
-            	data.add(order);
+            certificate order = new certificate();
+            order.num = sheet.getValueAt(1,d).toString();
+            order.declarant.name= sheet.getValueAt(3,d).toString();
+            clients_data.put(order.declarant.name, order.declarant);
+            order.user.name= sheet.getValueAt(4,d).toString();
+            clients_data.put(order.user.name, order.user);
+            order.device.model= sheet.getValueAt(5,d).toString();
+            order.device_serial= sheet.getValueAt(6,d).toString();
+            order.probe.model= sheet.getValueAt(7,d).toString();
+            String probe =sheet.getValueAt(8,d).toString();
+            order.probe_ser=probe;
+            if(probe.equals(",")){
+                String[] arr = {""};
+                order.probe_serial = arr;
+            }else{
+                probe=probe.replaceAll("\\s+", "");
+                order.probe_serial= probe.split(",");
+            }
+            order.calibration_code=sheet.getValueAt(9,d).toString();
+            order.calibration_date=sheet.getValueAt(10,d).toString();
+            devices_data.put(order.device.model, order.device);
+            probes_data.put(order.probe.model, order.probe);
+            data.add(order);
+            //System.out.println(order);
             }
             d++;
         }
     }
     
-    //find information about clients, who ordered calibration
+    //poszukiwanie klientów zlecających wzorcowanie/użytkowaników urządzenia
     private static void find_client_data() throws IOException{
         final Sheet sheet = SpreadSheet.createFromFile(file).getSheet("Klienci");
         int i=0;
@@ -153,7 +154,7 @@ public class certificateData {
         }        
     }
     
-    //find information about calibrated devices
+    //wyszukiwanie danych o wzorcowanych urządzeniach
     private static void find_device_data() throws IOException{
         final Sheet sheet = SpreadSheet.createFromFile(file).getSheet("Urządzenia");
         int i=0;
@@ -180,7 +181,7 @@ public class certificateData {
         }
     }
     
-    //find information about used probes
+    //pobiera dane o zastosowanych sondach
     private static void find_probe_data() throws IOException{
         final Sheet sheet = SpreadSheet.createFromFile(file).getSheet("Sondy");
         int i=0;
@@ -198,8 +199,8 @@ public class certificateData {
         }
     }
     
-    //put data to one certificate class
-    private static void uzupełnij(){
+    //wprowadza uzyskane dane do klas certificate
+    private static void gather(){
         certificate c= new certificate();
         for (int i=0; i<data.size(); i++){
             c=data.get(i);
@@ -215,24 +216,21 @@ public class certificateData {
         }
     }
     
-    // in progerss
+    //przekazanie danych o wzocowaniu
     static ArrayList<certificate> get_data(boolean Ir, int point){
     //    verification.certificate(data, Ir, point);
         return data;
     }
     
-    //return Lists with information about calibration
     static ArrayList<certificate> get_data(){
         //    verification.certificate(data, Ir, point);
             return data;
         }
-    
-    //set file with information about calibration
+ 
     static void set_file(File _file){
         file=_file;
     }
     
-    //print data about calibration, unused 
     static void print(){
         for(int i=0; i<data.size(); i++){
             System.out.println("nr"+data.get(i).num+"\nzgłaszający:");
@@ -245,13 +243,13 @@ public class certificateData {
         }
     }
     
-    //run fining data
+    //otrzymanie danych o wzorcowniu
     static void run() throws IOException{
         order();
         find_client_data();
         find_device_data();
         find_probe_data();
-        uzupełnij();
+        gather();
     }
     
     public static void main(String[] args) throws IOException{
@@ -259,7 +257,7 @@ public class certificateData {
         find_client_data();
         find_device_data();
         find_probe_data();
-        uzupełnij();
+        gather();
         print();
         
         System.out.println("dzień dobry");

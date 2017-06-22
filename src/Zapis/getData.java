@@ -6,7 +6,8 @@ import java.util.ArrayList;
  
 import org.jopendocument.dom.spreadsheet.Sheet;
 import org.jopendocument.dom.spreadsheet.SpreadSheet;
- 
+
+//wyniki pomiarów urządzenia
 class dev{
     int num;
     boolean[] q;
@@ -54,6 +55,7 @@ public class getData {
         typ.Filesset(add_file);
     }
     
+    // pobranie danych wzorca
     private static void find_probe_data(int points) throws IOException{
         final Sheet sheet = SpreadSheet.createFromFile(typ.file).getSheet(typ.Sheetname);
         patern.time = new String[points];
@@ -103,6 +105,7 @@ public class getData {
         return point;
     }
     
+    //pobranie danych o urządzeniach
     static ArrayList<dev> find_data(int points) throws IOException{
         final Sheet sheet = SpreadSheet.createFromFile(typ.file).getSheet(typ.Sheetname);
         for(int i=0; i<points; i++){

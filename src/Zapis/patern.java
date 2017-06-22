@@ -3,7 +3,8 @@ package Zapis;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
- 
+
+//dane na temat punktów pomiarowych wzorca
 class data_probe{
     boolean question=true;
     int value_t;
@@ -58,7 +59,6 @@ abstract class patern_probe{
 }
  
 class Rh_probe extends patern_probe {
-    //data_probe[] data;
     //zbieranie danych o wzorcu
     Rh_probe(File file) throws FileNotFoundException{
         Scanner sc = new Scanner(file);
@@ -171,7 +171,8 @@ class Rh_probe extends patern_probe {
                 Math.max(d3.uncertainty_t, d3.uncertainty_t));
         return sol;
     }
- 
+    
+    //wyznaczanie wartości poprawek
     private data_probe easy_calculate_rh(int t, int rh, int t1, int t2){
         data_probe d1 = null, d2=null;
         int b=0;
@@ -191,7 +192,8 @@ class Rh_probe extends patern_probe {
         double cor= (t-t1)/(t2-t1);
         return metrologyMath.easy_calculate(cor, d1, d2);
     }
- 
+    
+  //wyznaczanie wartości poprawek
     private data_probe easy_calculate_t(int t, int rh, int rh1, int rh2) {
         data_probe d1 = null, d2=null;
         int b=0;

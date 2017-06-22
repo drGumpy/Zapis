@@ -24,6 +24,7 @@ import javax.swing.border.TitledBorder;
 @SuppressWarnings("serial")
 public class console extends JFrame {
     
+	//dane na temat wzorcowania
     static ArrayList<certificate> data = new ArrayList<certificate>();
     static ArrayList<data> cal_point = new ArrayList<data>();
     
@@ -35,11 +36,13 @@ public class console extends JFrame {
     
     private chamber_data[] chamber_data;
     
+    //parametry wzorcowania
     private static boolean check = true;
     private static boolean Rh = false;
     private static boolean Ir = false;
     private static int points=3;
     
+    //pozycja arkusza, zapisu świadectw i zapisek wzorcowania
     private static JTextField
      sheet = new JTextField(50),
      certificate = new JTextField(50),
@@ -51,10 +54,11 @@ public class console extends JFrame {
     
     private static JButton generation, clientdata;
     
-    private static JTextField[] environment = new JTextField[4];
-    
+    //informacje odnośnie warunków środowiskowych
+    private static JTextField[] environment = new JTextField[4];   
     private static double enviroment_condition[] = {22.0, 22.0, 45.0, 45.0};
     
+    //przypisanie warunków środowiskowych
     private static JPanel environ(){
         JPanel jp = new JPanel();
         jp.setPreferredSize(new Dimension(400, 80));
@@ -171,7 +175,6 @@ public class console extends JFrame {
         JPanel jp = new JPanel();
         jp.setBorder(new TitledBorder("Folder zapisu zapisek z wzorcowania"));
         jp.add(b);
-        //notes.setText("C:\\Users\\Laboratorium\\Desktop\\Laboratorium\\Wyniki wzorcowań\\Zapiski\\");
         notes.setText("C:\\Users\\Laboratorium\\Desktop\\Laboratorium\\generacja\\Nowy folder\\zapiski\\");
         notes.setEditable(false);
         jp.add(notes);
@@ -191,7 +194,6 @@ public class console extends JFrame {
         JPanel jp = new JPanel();
         jp.setBorder(new TitledBorder("Folder zapisu świadectw wzorcowania"));
         jp.add(b);
-        //certificate.setText("C:\\Users\\Laboratorium\\Desktop\\Laboratorium\\Wyniki wzorcowań\\Świadectwa wzorcowania\\");
         certificate.setText("C:\\Users\\Laboratorium\\Desktop\\Laboratorium\\generacja\\Nowy folder\\świadectwa\\");
         certificate.setEditable(false);
         jp.add(certificate);
@@ -207,7 +209,6 @@ public class console extends JFrame {
     
     //rodzaj wykonywanego wzorcowania
     private static JPanel calibrationtype() {
-         //akcja bl = new akcja();
         ButtonGroup bg = new ButtonGroup();
         JPanel jp = new JPanel();
         String title = "ilośc punktów pomiarowych i rodzaj wzorcowania";
@@ -269,11 +270,12 @@ public class console extends JFrame {
         return jp;
     }
     
-    //elementy gui
+    //wyświetlenie gui
     public console() {
         JButton dattalogger= new JButton("dane o wzorcowaniu");
         clientdata= new JButton("wybierz zlecenia");
         generation= new JButton("generuj świadetwa");
+        //wprowadzenie danych o rejestratorach
         dattalogger.addActionListener(new ActionListener(){    
             public void actionPerformed(ActionEvent e) {
                 long startTime = System.currentTimeMillis();
@@ -301,7 +303,7 @@ public class console extends JFrame {
             }
         });
         setLayout(new FlowLayout());
-    //    clientdata.setEnabled(false);
+        //pozyskanie danych do świadectwa
         clientdata.addActionListener(new ActionListener(){    
             public void actionPerformed(ActionEvent e) {
                 long startTime = System.currentTimeMillis();
@@ -347,6 +349,7 @@ public class console extends JFrame {
                 
             }
         });
+        //wygenerowanie świadectw wzorcowania
         generation.addActionListener(new ActionListener(){
             public void actionPerformed(ActionEvent e) {
                 generate make = new generate();
@@ -380,6 +383,7 @@ public class console extends JFrame {
         add(generation);
     }
     
+    //uruchomienie programu
     public void run(){
         SwingUtilities.invokeLater(new Runnable(){
             console f = new console();

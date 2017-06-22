@@ -5,14 +5,17 @@ import java.io.FileNotFoundException;
 import java.util.Scanner;
  
 public class environment {
+	//dane o wzorcowaniu
     private data_probe[] certificate_data= new data_probe[4];
     
     double[] new_data = new double[4];
     
     int[] range = new int[4];
     
+    //plik z informacjami o urządzeniu do odczytu danych
     private File doc = new File("C:\\Users\\Laboratorium\\Desktop\\Laboratorium\\generacja\\w-srod.txt");
     
+    //pobranie danych o wzorcowaniu
     private void find(){
         try {
             Scanner sc = new Scanner(doc);
@@ -33,22 +36,22 @@ public class environment {
         }catch (FileNotFoundException e){}    
     }
     
+    // uwzględnienie poprawek
     private void find_data(double a, double b, int i){
         double t_correction = (a-range[0])/(range[1]-range[0]);
         double Rh_correction = (b-range[2])/(range[3]-range[2]);
- //      System.out.println("wsp. korekcji t: "+t_correction+" Rh:"+Rh_correction);
         double     c_t= metrologyMath.calculate(t_correction, Rh_correction,
                         certificate_data[0].correction_t, certificate_data[2].correction_t,
                         certificate_data[1].correction_t, certificate_data[3].correction_t),
                 c_Rh=metrologyMath.calculate(t_correction, Rh_correction,
                         certificate_data[0].correction_Rh, certificate_data[2].correction_Rh,
                         certificate_data[1].correction_Rh, certificate_data[3].correction_Rh);
-//        System.out.println("korekcja t: "+c_t+ " Rh:"+c_Rh);
         
         new_data[0+i]= a + c_t;
         new_data[2+i]= b + c_Rh;
     }
     
+    //uzyskanie danych wyjściowych
     private void corection() {
         double a= Math.max(Math.max(certificate_data[0].uncertainty_t, certificate_data[1].uncertainty_t),
                 Math.max(certificate_data[2].uncertainty_t, certificate_data[3].uncertainty_t)),
@@ -69,6 +72,7 @@ public class environment {
             System.out.println(certificate_data[i]+"\n");
     }
     
+    //przekazanie danych do bezpośredniego umieszczenia na świadectwie
     String[] calculate_data(double[] data){
         find();
         //print();

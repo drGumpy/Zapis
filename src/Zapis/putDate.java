@@ -14,7 +14,7 @@ public class putDate {
     static void put_file(File _file){
         file=_file;
     }
-    
+    //przekazanie dzisiejszej daty
     static void date(ArrayList<String> done) throws IOException{
          final Sheet sheet = SpreadSheet.createFromFile(file).getSheet("Zlecenia");
          int d=0;

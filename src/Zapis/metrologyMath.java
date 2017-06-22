@@ -4,9 +4,11 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalTime;
 import java.util.Date;
- 
+
+//metody stowane w programie
 public class metrologyMath {
     
+	//wyliczanie odchylenia standardowego z tablicy
     static double standard_deviation(double[] data){
         double average=0;
         int elements=data.length;
@@ -20,6 +22,7 @@ public class metrologyMath {
         return Math.sqrt(s);
     }
     
+    //wyliczenie średniej
     static double average(double[] data){
         double average=0;
         int elements=data.length;
@@ -29,20 +32,7 @@ public class metrologyMath {
         return average;
     }
     
-    static double error(double[] data){
-        double sol=0;
-        int n=data.length;
-        for(int i =0; i<n; i++)
-            sol+=Math.pow(data[i], 2);
-        return Math.sqrt(sol);
-    }
-    
-    static String[] environment(double t_min, double t_max, double Rh_min, double Rh_max){
-        String[] data= new String[2];
-        data[0] = Double.toString(t_min)+" ÷ "+Double.toString(t_min);
-        data[0] = Double.toString(t_min)+" ÷ "+Double.toString(t_min);
-        return data;
-    }
+    //wyznaczenie wartości pośrednich t + Rh
     static double calculate(double t, double Rh, double d1, double d2, double d3, double d4){
         double d, a, b;
         a=d1+(d2-d1)*t;
@@ -51,6 +41,7 @@ public class metrologyMath {
         return d;
         }
     
+    //wyznaczenie wartości pośrednich t
     static double calculate(double t, double d1, double d2){
         double a;
         a=d1+(d2-d1)*t;
@@ -63,10 +54,10 @@ public class metrologyMath {
         sol.correction_t= d1.correction_t+cor*(d2.correction_t-d1.correction_t);
         sol.uncertainty_Rh=Math.max(d1.uncertainty_Rh, d2.uncertainty_Rh);
         sol.uncertainty_t=Math.max(d1.uncertainty_t, d2.uncertainty_t);
-    /*    sol.drift_Rh = drift_Rh;
-        sol.drift_t = drift_t;*/
         return sol;
     }
+    
+    //sumowanie składowych niepewności
     static double uncertainty(double[] number){
         double sum= 0;
         for(int i=0; i<number.length; i++)
@@ -74,6 +65,8 @@ public class metrologyMath {
         sum= Math.sqrt(sum);
         return sum;
     }
+    
+    //znaleznie rozdzielczości przekazywania danych na świadectwie
     static double find_round(double unc, double res){
         double a=Math.log10(unc),
                 b=Math.log10(res);
@@ -99,6 +92,7 @@ public class metrologyMath {
         }
     }
     
+    //zaokrąglanie do n (places) miejsc po przecinku
     public static double round_(double value, int places) {
         if (places < 0) throw new IllegalArgumentException();
  
@@ -108,6 +102,7 @@ public class metrologyMath {
         return (double) tmp / factor;
     }
     
+    //zaokrąglanie zgodne z przyjętą rozdzielczością
     static double round_d(double num, double round){
         double s=Math.round(num/round);
         s=s*round;
@@ -136,6 +131,7 @@ public class metrologyMath {
         return String.format(format, s);
     }
     
+    //przkazanie fomatu godziny z arkusz do użyteczenej formy
     static String parseTime(String data){
         Date date;
         try {
@@ -143,17 +139,18 @@ public class metrologyMath {
             String newString = new SimpleDateFormat("HH:mm").format(date); // 9:00
             return newString;
         } catch (ParseException e) {
-            // TODO Auto-generated catch block
             return data;
         }
     }
     
+    //podanie dodanie do czasu d minut
     static String time (String time, int d){
         LocalTime t= LocalTime.parse(time);
         t=t.plusMinutes(d);
         return t.toString();
     }
     
+    //sprawdzanie czy format danych o warunkach środowiskowych jest poprawny
     static boolean validate(String num){
         //System.out.println("numer "+num);
         try {

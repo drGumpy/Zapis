@@ -7,7 +7,8 @@ import java.util.Date;
  
 import org.jopendocument.dom.spreadsheet.Sheet;
 import org.jopendocument.dom.spreadsheet.SpreadSheet;
- 
+
+//dane o punktach pomiarowych
 class certificate_value{
     String probe_t;
     String probe_Rh;
@@ -33,10 +34,11 @@ public class generate {
     
     private String[] environment;
     
+    //wygenerowanie świadectwa wzorcowania
     private void generate_cal(ArrayList<certificate_value> data,certificate type) throws IOException{
-    //    System.out.println("genetrowanie...");
         boolean sw2 = false;
         File file =cal;
+        //typ świadectwa
         if(!Rh){
             if(type.calibration_code.equals("SW2")){
                 sw2=true;
@@ -49,6 +51,7 @@ public class generate {
         }
         final Sheet sheet = SpreadSheet.createFromFile(file).getSheet("Świadectwo wzorcowania");
         int col;
+        //umieszczenie daty i numeru świadectwa
         if(Rh){
             sheet.setValueAt(new Date( ), 9 , 13);
             sheet.setValueAt(new Date( ), 9 , 70);
@@ -62,6 +65,7 @@ public class generate {
             sheet.setValueAt(type.num, 22 , 70);
             col=12;
         }
+        //dane na temat przyrządu
         String name =String.format("%s, model: %s, producent: %s, nr seryjny: %s",
                 type.device.type, type.device.model, type.device.producent,type.device_serial);
         if(!type.probe_serial[0].equals("")){
@@ -74,6 +78,7 @@ public class generate {
             }
         else
             name+=".";
+        //dane na temat klientów i wzorcowań
         sheet.setValueAt(name, col , 16);
         sheet.setValueAt(type.declarant.name, col , 20);
         sheet.setValueAt(type.declarant, col , 21);
@@ -83,6 +88,7 @@ public class generate {
         sheet.setValueAt("Wilgotność: "+environment[1], col , 31);
         sheet.setValueAt(type.calibration_date, col , 33);
         
+        //wprwadzanie danych liczbowych z wzorcowania
         if(Rh){
             int line=84;
             int lenght= data.size();
@@ -155,7 +161,8 @@ public class generate {
         name = cal_path+type.num+"_"+type.declarant.name + ".ods";
         sheet.getSpreadSheet().saveAs(new File(name));       
     }
- 
+    
+    // informacja odnośnie sond i kanałów urządzeń
     private String find(String probe_serial, String chanel) {
         String val ="";
         
@@ -171,7 +178,8 @@ public class generate {
         
         return val;
     }
- 
+    
+    // generowanie zapiski wzorcowania
     private void generate_doc(dev device, certificate type){
         
         point = device.average_t.length;
@@ -311,6 +319,7 @@ public class generate {
         } catch (IOException e) {}
     }
     
+    //znalezienie odpowiednich szablonów
     private void find_data(){
         if(patern.average_Rh!=null){
             Rh = true;
@@ -322,7 +331,7 @@ public class generate {
             cal = new File("C:\\Users\\Laboratorium\\Desktop\\Laboratorium\\generacja\\sw_t.ods");
         }
     }
-    
+    //umieszczanie danych o wzorcowaniu
     void put_patern(dev patern){
         this.patern= patern;
     }
@@ -347,15 +356,14 @@ public class generate {
         this.data_probe=data_probe;
     }
     
+    //parowanie informacji odnośnie wzorcowania
     void run(ArrayList <certificate> data){
         int n=data.size();
         find_data();
         for(int i=0; i<n; i++){
             if(devices.size()==0) break;
             String name = data.get(i).device_serial;
-       //    System.out.println("szukam: "+name);
             for(int j=0; j<devices.size(); j++){
-       //         System.out.println("mam "+devices.get(j).name);
                 if(devices.get(j).name.equals(name)){
                     generate_doc(devices.get(j), data.get(i));
                     devices.remove(j);
@@ -364,7 +372,8 @@ public class generate {
             }
         }
     }
- 
+    
+    //lista wykonanych świadectw wzorcowania
     public ArrayList<String> get_done() {
         return done;
     }

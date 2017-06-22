@@ -2,6 +2,7 @@ package Zapis;
  
 import java.io.File;
  
+//przechowywanie danych o wzorcowanych puntkach
 class data{
     int number=0;
     File file=null;
@@ -32,7 +33,8 @@ class data{
         return temp+"\t"+hum;
     }
 }
- 
+
+//klasy opisujące format danych poszczególnych rejestratorów
 class onset extends data{
     onset(boolean RH) {
         super(RH);
