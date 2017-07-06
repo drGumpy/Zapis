@@ -44,17 +44,16 @@ public class chamber {
             }
             standard_point.add(d);
         }
-        n= in.nextInt();
-        range_num=n;
+        range_num=in.nextInt();
         int m;
         if(Rh){
-            ranges= new int[n][4];
+            ranges= new int[range_num][4];
             m=4;
         }else{
-            ranges= new int[n][2];
+            ranges= new int[range_num][2];
             m=2;
         }
-        for(int i=0; i<n; i++){
+        for(int i=0; i<range_num; i++){
             for(int j=0; j<m; j++){
                 ranges[i][j]= in.nextInt();
             }
